@@ -1,13 +1,390 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>This is a Simple Come and Go Project</title>
-</head>
-<body>
-    <video src="../../media/videos/underworld.mp4" autoplay loop></video>
-    <br>
-    <button onclick="location.href='../../index.html'" >Click Me!</button>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Video Experience</title>
+    <style>
+      /* CSS Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        color: #333;
+        line-height: 1.6;
+      }
+      
+      /* Header Styles */
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+        width: 100%;
+        max-width: 800px;
+      }
+      
+      .title {
+        font-size: 2.5rem;
+        font-weight: 300;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+      }
+      
+      .subtitle {
+        font-size: 1.1rem;
+        color: #7f8c8d;
+        font-weight: 400;
+      }
+      
+      /* Video Container Styles */
+      .video-container {
+        width: 100%;
+        max-width: 800px;
+        margin-bottom: 30px;
+        position: relative;
+      }
+      
+      .main-video {
+        width: 100%;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+      }
+      
+      .main-video:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      }
+      
+      /* Video Grid Styles */
+      .video-grid {
+        display: none;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+        padding: 20px;
+        width: 100%;
+        max-width: 800px;
+        margin-bottom: 30px;
+      }
+      
+      .video-grid.active {
+        display: grid;
+      }
+      
+      .video-grid video {
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+      
+      .video-grid video:hover {
+        transform: scale(1.03);
+      }
+      
+      /* Button Container Styles */
+      .button-container {
+        width: 100%;
+        max-width: 800px;
+        text-align: center;
+        margin-top: 20px;
+      }
+      
+      .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 25px;
+        margin-bottom: 20px;
+      }
+      
+      .button {
+        padding: 14px 30px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        letter-spacing: 0.5px;
+        min-width: 150px;
+      }
+      
+      .button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 20px rgba(0, 0, 0, 0.15);
+      }
+      
+      .button:active {
+        transform: translateY(1px);
+      }
+      
+      #yesButton {
+        background: linear-gradient(135deg, #2ecc71, #1abc9c);
+        color: white;
+      }
+      
+      #noButton {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+      }
+      
+      /* Text Styles */
+      .interactive-text {
+        font-size: 2.2rem;
+        margin: 25px 0;
+        cursor: pointer;
+        color: #3498db;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        padding: 10px 20px;
+        border-radius: 8px;
+      }
+      
+      .interactive-text:hover {
+        color: #2980b9;
+        background-color: rgba(52, 152, 219, 0.1);
+        transform: scale(1.05);
+      }
+      
+      .thanks-text {
+        font-size: 2.2rem;
+        margin: 25px 0;
+        color: #27ae60;
+        font-weight: 500;
+        padding: 10px 20px;
+        border-radius: 8px;
+        background-color: rgba(39, 174, 96, 0.1);
+        animation: pulse 2s infinite;
+      }
+      
+      /* Progress Indicator */
+      .progress-container {
+        width: 100%;
+        max-width: 800px;
+        margin-bottom: 20px;
+      }
+      
+      .progress-bar {
+        height: 6px;
+        background-color: #ecf0f1;
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      
+      .progress {
+        height: 100%;
+        background: linear-gradient(135deg, #3498db, #9b59b6);
+        width: 0%;
+        transition: width 0.5s ease;
+      }
+      
+      /* Animations */
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      
+      .fade-in {
+        animation: fadeIn 0.8s ease forwards;
+      }
+      
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .title {
+          font-size: 2rem;
+        }
+        
+        .subtitle {
+          font-size: 1rem;
+        }
+        
+        .video-grid {
+          grid-template-columns: 1fr;
+          gap: 15px;
+        }
+        
+        .action-buttons {
+          flex-direction: column;
+          align-items: center;
+          gap: 15px;
+        }
+        
+        .button {
+          width: 100%;
+          max-width: 250px;
+        }
+        
+        .interactive-text, .thanks-text {
+          font-size: 1.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header fade-in">
+      <h1 class="title">Interactive Video Experience</h1>
+      <p class="subtitle">Your choices guide the narrative</p>
+    </div>
+    
+    <div class="progress-container fade-in">
+      <div class="progress-bar">
+        <div class="progress" id="progressBar"></div>
+      </div>
+    </div>
+
+    <div class="video-container fade-in" id="mainVideoContainer">
+      <video
+        id="mainVideo"
+        src="../../media/videos/Anjali1.mp4"
+        autoplay
+        class="main-video"
+        controls
+      ></video>
+    </div>
+
+    <div class="video-grid" id="sadVideosGrid">
+      <video src="../../media/videos/sad1.mp4" loop></video>
+      <video src="../../media/videos/sad2.mp4" loop></video>
+      <video src="../../media/videos/sad3.mp4" loop></video>
+      <video src="../../media/videos/sad4.mp4" loop></video>
+    </div>
+
+    <div class="button-container fade-in" id="buttonsContainer">
+      <h2 class="interactive-text" id="maanGayiText" style="display: none">
+        Have you accepted?
+      </h2>
+      <h2 class="thanks-text" id="thanksText" style="display: none">
+        Thank You! 😊
+      </h2>
+      <div class="action-buttons" id="actionButtons">
+        <button class="button" id="yesButton">Accept</button>
+        <button class="button" id="noButton">Decline</button>
+      </div>
+    </div>
+
+    <script>
+      // DOM Elements
+      const mainVideoContainer = document.getElementById("mainVideoContainer");
+      const video = document.getElementById("mainVideo");
+      const noButton = document.getElementById("noButton");
+      const yesButton = document.getElementById("yesButton");
+      const sadVideosGrid = document.getElementById("sadVideosGrid");
+      const actionButtons = document.getElementById("actionButtons");
+      const maanGayiText = document.getElementById("maanGayiText");
+      const thanksText = document.getElementById("thanksText");
+      const progressBar = document.getElementById("progressBar");
+      
+      // State variables
+      let currentVideo = "anjali1";
+      let progressValue = 0;
+
+      // Update progress bar
+      function updateProgress(value) {
+        progressValue = value;
+        progressBar.style.width = `${progressValue}%`;
+      }
+
+      // Video play event listener
+      video.addEventListener("play", function () {
+        // Update currentVideo based on the source
+        if (video.src.includes("Anjali1.mp4")) {
+          currentVideo = "anjali1";
+          updateProgress(25);
+        } else if (video.src.includes("Anjali2.mp4")) {
+          currentVideo = "anjali2";
+          updateProgress(50);
+        } else if (video.src.includes("underworld")) {
+          currentVideo = "underworld";
+          updateProgress(75);
+        } else if (video.src.includes("boyfriend")) {
+          currentVideo = "boyfriend";
+          updateProgress(100);
+        }
+      });
+
+      // Function to play the final video
+      function playBoyfriendVideo() {
+        mainVideoContainer.style.display = "block";
+        sadVideosGrid.classList.remove("active");
+        
+        // Pause all sad videos if they're playing
+        const allSadVideos = sadVideosGrid.querySelectorAll("video");
+        allSadVideos.forEach((video) => video.pause());
+        
+        // Play boyfriend video
+        video.src = "../../media/videos/boyfriend.mp4";
+        currentVideo = "boyfriend";
+        video.play();
+        
+        // Show thanks message and hide other elements
+        actionButtons.style.display = "none";
+        maanGayiText.style.display = "none";
+        thanksText.style.display = "block";
+        
+        // Update progress
+        updateProgress(100);
+      }
+
+      // No button click handler
+      noButton.addEventListener("click", function () {
+        if (currentVideo === "anjali1") {
+          video.src = "../../media/videos/Anjali2.mp4";
+          currentVideo = "anjali2";
+          video.play();
+        } else if (currentVideo === "anjali2") {
+          video.src = "../../media/videos/underworld.mp4";
+          currentVideo = "underworld";
+          video.play();
+        } else if (currentVideo === "underworld") {
+          // Show all sad videos in grid
+          mainVideoContainer.style.display = "none";
+          sadVideosGrid.classList.add("active");
+          
+          // Start all videos in grid
+          const allSadVideos = sadVideosGrid.querySelectorAll("video");
+          allSadVideos.forEach((video) => {
+            video.play();
+          });
+          
+          // Show only the interactive text
+          actionButtons.style.display = "none";
+          maanGayiText.style.display = "block";
+        }
+      });
+
+      // Event listeners for the yes button and interactive text
+      yesButton.addEventListener("click", playBoyfriendVideo);
+      maanGayiText.addEventListener("click", playBoyfriendVideo);
+    </script>
+  </body>
 </html>

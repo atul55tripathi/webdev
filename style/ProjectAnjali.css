@@ -1,0 +1,9 @@
+body{
+    background-color: lightblue;
+    color: darkblue;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    border: 2px solid darkblue;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
