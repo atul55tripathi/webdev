@@ -1,390 +1,553 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Interactive Video Experience</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Come and Go - Interactive Experience</title>
     <style>
-      /* CSS Reset and Base Styles */
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      
-      body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 20px;
-        color: #333;
-        line-height: 1.6;
-      }
-      
-      /* Header Styles */
-      .header {
-        text-align: center;
-        margin-bottom: 30px;
-        width: 100%;
-        max-width: 800px;
-      }
-      
-      .title {
-        font-size: 2.5rem;
-        font-weight: 300;
-        color: #2c3e50;
-        margin-bottom: 10px;
-        letter-spacing: 1px;
-      }
-      
-      .subtitle {
-        font-size: 1.1rem;
-        color: #7f8c8d;
-        font-weight: 400;
-      }
-      
-      /* Video Container Styles */
-      .video-container {
-        width: 100%;
-        max-width: 800px;
-        margin-bottom: 30px;
-        position: relative;
-      }
-      
-      .main-video {
-        width: 100%;
-        height: auto;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        transition: all 0.3s ease;
-      }
-      
-      .main-video:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-      }
-      
-      /* Video Grid Styles */
-      .video-grid {
-        display: none;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 25px;
-        padding: 20px;
-        width: 100%;
-        max-width: 800px;
-        margin-bottom: 30px;
-      }
-      
-      .video-grid.active {
-        display: grid;
-      }
-      
-      .video-grid video {
-        width: 100%;
-        border-radius: 8px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-      }
-      
-      .video-grid video:hover {
-        transform: scale(1.03);
-      }
-      
-      /* Button Container Styles */
-      .button-container {
-        width: 100%;
-        max-width: 800px;
-        text-align: center;
-        margin-top: 20px;
-      }
-      
-      .action-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 25px;
-        margin-bottom: 20px;
-      }
-      
-      .button {
-        padding: 14px 30px;
-        font-size: 1.1rem;
-        font-weight: 500;
-        border: none;
-        border-radius: 50px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        letter-spacing: 0.5px;
-        min-width: 150px;
-      }
-      
-      .button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 7px 20px rgba(0, 0, 0, 0.15);
-      }
-      
-      .button:active {
-        transform: translateY(1px);
-      }
-      
-      #yesButton {
-        background: linear-gradient(135deg, #2ecc71, #1abc9c);
-        color: white;
-      }
-      
-      #noButton {
-        background: linear-gradient(135deg, #e74c3c, #c0392b);
-        color: white;
-      }
-      
-      /* Text Styles */
-      .interactive-text {
-        font-size: 2.2rem;
-        margin: 25px 0;
-        cursor: pointer;
-        color: #3498db;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        padding: 10px 20px;
-        border-radius: 8px;
-      }
-      
-      .interactive-text:hover {
-        color: #2980b9;
-        background-color: rgba(52, 152, 219, 0.1);
-        transform: scale(1.05);
-      }
-      
-      .thanks-text {
-        font-size: 2.2rem;
-        margin: 25px 0;
-        color: #27ae60;
-        font-weight: 500;
-        padding: 10px 20px;
-        border-radius: 8px;
-        background-color: rgba(39, 174, 96, 0.1);
-        animation: pulse 2s infinite;
-      }
-      
-      /* Progress Indicator */
-      .progress-container {
-        width: 100%;
-        max-width: 800px;
-        margin-bottom: 20px;
-      }
-      
-      .progress-bar {
-        height: 6px;
-        background-color: #ecf0f1;
-        border-radius: 3px;
-        overflow: hidden;
-      }
-      
-      .progress {
-        height: 100%;
-        background: linear-gradient(135deg, #3498db, #9b59b6);
-        width: 0%;
-        transition: width 0.5s ease;
-      }
-      
-      /* Animations */
-      @keyframes pulse {
-        0% {
-          transform: scale(1);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Neue', cursive, Arial, sans-serif;
         }
-        50% {
-          transform: scale(1.05);
+        
+        body {
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #5a3e36;
+            overflow-x: hidden;
         }
-        100% {
-          transform: scale(1);
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
         }
-      }
-      
-      .fade-in {
-        animation: fadeIn 0.8s ease forwards;
-      }
-      
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
+        
+        .header {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 3px dashed #ff6b6b;
         }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      
-      /* Responsive Design */
-      @media (max-width: 768px) {
-        .title {
-          font-size: 2rem;
+        
+        h1 {
+            font-size: 3rem;
+            color: #d63384;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0 #ffde7d;
+            letter-spacing: 1px;
         }
         
         .subtitle {
-          font-size: 1rem;
+            font-size: 1.2rem;
+            color: #5a3e36;
+            margin-bottom: 10px;
+        }
+        
+        .video-container {
+            width: 100%;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .main-video {
+            width: 100%;
+            max-width: 700px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border: 5px solid #ffde7d;
         }
         
         .video-grid {
-          grid-template-columns: 1fr;
-          gap: 15px;
+            display: none;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 100%;
+            margin-bottom: 30px;
         }
         
-        .action-buttons {
-          flex-direction: column;
-          align-items: center;
-          gap: 15px;
+        .video-grid.active {
+            display: grid;
+        }
+        
+        .video-grid video {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border: 3px solid #ff6b6b;
+        }
+        
+        .button-container {
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
         }
         
         .button {
-          width: 100%;
-          max-width: 250px;
+            padding: 18px 35px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            min-width: 200px;
         }
         
-        .interactive-text, .thanks-text {
-          font-size: 1.8rem;
+        .button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
         }
-      }
+        
+        .button:active {
+            transform: translateY(2px);
+        }
+        
+        #yesButton {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            color: #1a535c;
+            animation: pulse 2s infinite;
+        }
+        
+        #noButton {
+            background: linear-gradient(135deg, #ff6b6b, #ffa8a8);
+            color: #5a3e36;
+        }
+        
+        .interactive-text {
+            font-size: 2.5rem;
+            margin: 25px 0;
+            cursor: pointer;
+            color: #d63384;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            padding: 15px 30px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            display: inline-block;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            border: 3px dashed #ff6b6b;
+        }
+        
+        .interactive-text:hover {
+            transform: scale(1.1) rotate(2deg);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .thanks-text {
+            font-size: 2.5rem;
+            margin: 25px 0;
+            color: #43e97b;
+            font-weight: bold;
+            padding: 15px 30px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            display: inline-block;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            border: 3px solid #43e97b;
+            animation: bounce 1.5s infinite;
+        }
+        
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .heart {
+            position: absolute;
+            font-size: 24px;
+            color: #ff6b6b;
+            opacity: 0.7;
+            animation: float 8s linear infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(67, 233, 123, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(67, 233, 123, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(67, 233, 123, 0);
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+        
+        .speech-bubble {
+            position: relative;
+            background: #fff;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 3px solid #ffde7d;
+            transition: opacity 0.5s ease;
+        }
+        
+        .speech-bubble:after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            border: 10px solid transparent;
+            border-top-color: #ffde7d;
+            margin-left: -10px;
+        }
+        
+        .progress-container {
+            width: 100%;
+            max-width: 700px;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.7);
+            height: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #ffde7d, #43e97b);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+        
+        .funny-message {
+            font-size: 1.2rem;
+            color: #5a3e36;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            font-size: 2.5rem;
+            color: #d63384;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .play-button:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            background: white;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .button {
+                min-width: 250px;
+            }
+            
+            .interactive-text, .thanks-text {
+                font-size: 1.8rem;
+            }
+        }
     </style>
-  </head>
-  <body>
-    <div class="header fade-in">
-      <h1 class="title">Interactive Video Experience</h1>
-      <p class="subtitle">Your choices guide the narrative</p>
-    </div>
+</head>
+<body>
+    <div class="floating-hearts" id="heartsContainer"></div>
     
-    <div class="progress-container fade-in">
-      <div class="progress-bar">
-        <div class="progress" id="progressBar"></div>
-      </div>
-    </div>
+    <div class="container">
+        <div class="header">
+            <h1>All I Wanna Say Is...</h1>
+            <p class="subtitle">This is not your average love confession! Choose wisely 😉</p>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="video-container" id="mainVideoContainer">
+            <video id="mainVideo" class="main-video" controls>
+                <source src="../../media/videos/Anjali1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <button class="play-button" id="playButton">▶️</button>
+        </div>
 
-    <div class="video-container fade-in" id="mainVideoContainer">
-      <video
-        id="mainVideo"
-        src="../../media/videos/Anjali1.mp4"
-        autoplay
-        class="main-video"
-        controls
-      ></video>
-    </div>
+        <div class="video-grid" id="sadVideosGrid">
+            <video src="../../media/videos/sad1.mp4" loop></video>
+            <video src="../../media/videos/sad2.mp4" loop></video>
+            <video src="../../media/videos/sad3.mp4" loop></video>
+            <video src="../../media/videos/sad4.mp4" loop></video>
+        </div>
 
-    <div class="video-grid" id="sadVideosGrid">
-      <video src="../../media/videos/sad1.mp4" loop></video>
-      <video src="../../media/videos/sad2.mp4" loop></video>
-      <video src="../../media/videos/sad3.mp4" loop></video>
-      <video src="../../media/videos/sad4.mp4" loop></video>
-    </div>
+        <div class="speech-bubble" id="speechBubble">
+            <p class="funny-message" id="funnyMessage">So... what's your final answer? Don't keep me waiting! 🥺</p>
+        </div>
 
-    <div class="button-container fade-in" id="buttonsContainer">
-      <h2 class="interactive-text" id="maanGayiText" style="display: none">
-        Have you accepted?
-      </h2>
-      <h2 class="thanks-text" id="thanksText" style="display: none">
-        Thank You! 😊
-      </h2>
-      <div class="action-buttons" id="actionButtons">
-        <button class="button" id="yesButton">Accept</button>
-        <button class="button" id="noButton">Decline</button>
-      </div>
+        <div class="button-container" id="buttonsContainer">
+            <h2 class="interactive-text" id="maanGayiText" style="display: none">Maan gayi? 😏</h2>
+            <h2 class="thanks-text" id="thanksText" style="display: none">Thanks! You made my day! 😊💖</h2>
+            <div id="actionButtons">
+                <button class="button" id="yesButton">I love you too! 💖</button>
+                <button class="button" id="noButton">Nahi... 😅</button>
+            </div>
+        </div>
     </div>
 
     <script>
-      // DOM Elements
-      const mainVideoContainer = document.getElementById("mainVideoContainer");
-      const video = document.getElementById("mainVideo");
-      const noButton = document.getElementById("noButton");
-      const yesButton = document.getElementById("yesButton");
-      const sadVideosGrid = document.getElementById("sadVideosGrid");
-      const actionButtons = document.getElementById("actionButtons");
-      const maanGayiText = document.getElementById("maanGayiText");
-      const thanksText = document.getElementById("thanksText");
-      const progressBar = document.getElementById("progressBar");
-      
-      // State variables
-      let currentVideo = "anjali1";
-      let progressValue = 0;
+        // DOM Elements
+        const mainVideoContainer = document.getElementById("mainVideoContainer");
+        const video = document.getElementById("mainVideo");
+        const noButton = document.getElementById("noButton");
+        const yesButton = document.getElementById("yesButton");
+        const sadVideosGrid = document.getElementById("sadVideosGrid");
+        const actionButtons = document.getElementById("actionButtons");
+        const maanGayiText = document.getElementById("maanGayiText");
+        const thanksText = document.getElementById("thanksText");
+        const progressBar = document.getElementById("progressBar");
+        const funnyMessage = document.getElementById("funnyMessage");
+        const heartsContainer = document.getElementById("heartsContainer");
+        const playButton = document.getElementById("playButton");
+        const speechBubble = document.getElementById("speechBubble");
+        
+        // State variables
+        let currentVideo = "anjali1";
+        let progressValue = 0;
+        let nahiCount = 0;
+        const funnyMessages = [
+            "So... what's your final answer? Don't keep me waiting! 🥺",
+            "Are you sure about that? Think again! 😉",
+            "Really? You're breaking my heart here! 💔",
+            "You're really testing my patience now! 😠"
+        ];
 
-      // Update progress bar
-      function updateProgress(value) {
-        progressValue = value;
-        progressBar.style.width = `${progressValue}%`;
-      }
-
-      // Video play event listener
-      video.addEventListener("play", function () {
-        // Update currentVideo based on the source
-        if (video.src.includes("Anjali1.mp4")) {
-          currentVideo = "anjali1";
-          updateProgress(25);
-        } else if (video.src.includes("Anjali2.mp4")) {
-          currentVideo = "anjali2";
-          updateProgress(50);
-        } else if (video.src.includes("underworld")) {
-          currentVideo = "underworld";
-          updateProgress(75);
-        } else if (video.src.includes("boyfriend")) {
-          currentVideo = "boyfriend";
-          updateProgress(100);
+        // Create floating hearts
+        function createHearts() {
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 10 + 5) + 's';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heartsContainer.appendChild(heart);
+            }
         }
-      });
-
-      // Function to play the final video
-      function playBoyfriendVideo() {
-        mainVideoContainer.style.display = "block";
-        sadVideosGrid.classList.remove("active");
         
-        // Pause all sad videos if they're playing
-        const allSadVideos = sadVideosGrid.querySelectorAll("video");
-        allSadVideos.forEach((video) => video.pause());
-        
-        // Play boyfriend video
-        video.src = "../../media/videos/boyfriend.mp4";
-        currentVideo = "boyfriend";
-        video.play();
-        
-        // Show thanks message and hide other elements
-        actionButtons.style.display = "none";
-        maanGayiText.style.display = "none";
-        thanksText.style.display = "block";
-        
-        // Update progress
-        updateProgress(100);
-      }
-
-      // No button click handler
-      noButton.addEventListener("click", function () {
-        if (currentVideo === "anjali1") {
-          video.src = "../../media/videos/Anjali2.mp4";
-          currentVideo = "anjali2";
-          video.play();
-        } else if (currentVideo === "anjali2") {
-          video.src = "../../media/videos/underworld.mp4";
-          currentVideo = "underworld";
-          video.play();
-        } else if (currentVideo === "underworld") {
-          // Show all sad videos in grid
-          mainVideoContainer.style.display = "none";
-          sadVideosGrid.classList.add("active");
-          
-          // Start all videos in grid
-          const allSadVideos = sadVideosGrid.querySelectorAll("video");
-          allSadVideos.forEach((video) => {
-            video.play();
-          });
-          
-          // Show only the interactive text
-          actionButtons.style.display = "none";
-          maanGayiText.style.display = "block";
+        // Update progress bar
+        function updateProgress(value) {
+            progressValue = value;
+            progressBar.style.width = `${progressValue}%`;
         }
-      });
 
-      // Event listeners for the yes button and interactive text
-      yesButton.addEventListener("click", playBoyfriendVideo);
-      maanGayiText.addEventListener("click", playBoyfriendVideo);
+        // Update funny message
+        function updateFunnyMessage() {
+            if (nahiCount < funnyMessages.length) {
+                funnyMessage.textContent = funnyMessages[nahiCount];
+            } else {
+                funnyMessage.textContent = "Okay, I give up! You win! 😫";
+            }
+        }
+
+        // Play video function
+        function playVideo() {
+            video.play().then(() => {
+                playButton.style.display = 'none';
+            }).catch(error => {
+                console.error("Error playing video:", error);
+                playButton.style.display = 'block';
+            });
+        }
+
+        // Function to play the final video
+        function playBoyfriendVideo() {
+            mainVideoContainer.style.display = "block";
+            sadVideosGrid.classList.remove("active");
+            
+            // Pause all sad videos if they're playing
+            const allSadVideos = sadVideosGrid.querySelectorAll("video");
+            allSadVideos.forEach((video) => video.pause());
+            
+            // Play boyfriend video
+            video.src = "../../media/videos/boyfriend.mp4";
+            currentVideo = "boyfriend";
+            playVideo();
+            
+            // Show thanks message and hide other elements
+            actionButtons.style.display = "none";
+            maanGayiText.style.display = "none";
+            thanksText.style.display = "block";
+            
+            // Hide the speech bubble
+            speechBubble.style.display = "none";
+            
+            // Update progress
+            updateProgress(100);
+            
+            // Create more hearts for celebration
+            for (let i = 0; i < 30; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '💖';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 5 + 3) + 's';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heartsContainer.appendChild(heart);
+            }
+        }
+
+        // No button click handler
+        noButton.addEventListener("click", function () {
+            nahiCount++;
+            updateFunnyMessage();
+            
+            if (currentVideo === "anjali1") {
+                video.src = "../../media/videos/Anjali2.mp4";
+                currentVideo = "anjali2";
+                playVideo();
+            } else if (currentVideo === "anjali2") {
+                video.src = "../../media/videos/underworld.mp4";
+                currentVideo = "underworld";
+                playVideo();
+            } else if (currentVideo === "underworld") {
+                // Show all sad videos in grid
+                mainVideoContainer.style.display = "none";
+                sadVideosGrid.classList.add("active");
+                
+                // Start all videos in grid
+                const allSadVideos = sadVideosGrid.querySelectorAll("video");
+                allSadVideos.forEach((video) => {
+                    video.play().catch(e => console.log("Could not autoplay grid video"));
+                });
+                
+                // Show only the interactive text
+                actionButtons.style.display = "none";
+                maanGayiText.style.display = "block";
+            }
+            
+            // Add a funny shake animation to the no button
+            noButton.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                noButton.style.animation = '';
+            }, 500);
+        });
+
+        // Event listeners for the yes button and interactive text
+        yesButton.addEventListener("click", playBoyfriendVideo);
+        maanGayiText.addEventListener("click", playBoyfriendVideo);
+        
+        // Play button for the video
+        playButton.addEventListener("click", playVideo);
+        
+        // Hide play button when video starts playing
+        video.addEventListener("play", function() {
+            playButton.style.display = 'none';
+        });
+        
+        // Show play button when video pauses
+        video.addEventListener("pause", function() {
+            playButton.style.display = 'block';
+        });
+        
+        // Initialize the page
+        createHearts();
+        updateFunnyMessage();
+        
+        // Try to autoplay the video with user interaction
+        document.addEventListener('click', function initVideo() {
+            playVideo();
+            document.removeEventListener('click', initVideo);
+        }, { once: true });
+        
+        // Add CSS for shake animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Video play event listener for progress tracking
+        video.addEventListener("play", function () {
+            // Update currentVideo based on the source
+            if (video.src.includes("Anjali1.mp4")) {
+                currentVideo = "anjali1";
+                updateProgress(25);
+            } else if (video.src.includes("Anjali2.mp4")) {
+                currentVideo = "anjali2";
+                updateProgress(50);
+            } else if (video.src.includes("underworld")) {
+                currentVideo = "underworld";
+                updateProgress(75);
+            } else if (video.src.includes("boyfriend")) {
+                currentVideo = "boyfriend";
+                updateProgress(100);
+            }
+        });
     </script>
-  </body>
+</body>
 </html>
